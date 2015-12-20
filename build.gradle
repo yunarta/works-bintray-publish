@@ -1,14 +1,12 @@
-# Works - Bintray Publish Plugin
-
-A shorter version of Bintray Publish plugin. And the publish.properties file
-is missing, the plugin will not load the required bintray and maven plugin thus
-this will make gradle build faster
-
-**build.gradle**
-```groovy
 buildscript {
     repositories {
         jcenter()
+        maven {
+            url 'http://dl.bintray.com/yunarta-kartawahyudi/maven'
+        }
+        maven {
+            url 'http://dl.bintray.com/yunarta-kartawahyudi/snapshot'
+        }
     }
 
     dependencies {
@@ -16,7 +14,21 @@ buildscript {
     }
 }
 
+apply plugin: 'groovy'
 apply plugin: 'com.mobilesolutionworks.bintray-publish'
+
+group 'com.mobilesolutionworks'
+version '1.0.0'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile gradleApi()
+    compile 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.5'
+    compile 'com.github.dcendents:android-maven-gradle-plugin:1.3'
+}
 
 worksPublish {
     bintray {
@@ -40,17 +52,3 @@ worksPublish {
     siteUrl 'https://github.com/yunarta/works-bintray-publish'
     gitUrl 'https://github.com/yunarta/works-bintray-publish.git'
 }
-```
-
-In order for the publish function to works, it requires "publish.properties"
-in the root project directory.
-
-**publish.properties**
-```
-user=yunarta-kartawahyudi
-api.key=API_KEY
-repo=snapshot
-```
-
-The repo here will override the repo in bintray { }, useful for automated build
-
